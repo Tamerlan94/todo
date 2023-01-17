@@ -1,6 +1,6 @@
 <template>
     <n-card class="base-card" v-for="column in columns" :key="column.id" hoverable
-            @drop="onDrop($event, column.cards)"
+            @drop="onDrop($event, column)"
             @dragover.prevent
             @dragenter.prevent>
         <template #header>
@@ -207,12 +207,14 @@ export default {
         startDrag(evt, item) {
             evt.dataTransfer.dropEffect = 'move';
             evt.dataTransfer.effectAllowed = 'move';
-            evt.dataTransfer.setData('itemID', item);
+            evt.dataTransfer.setData('id', item.id);
+            evt.dataTransfer.setData('column_id', item.column_id);
             this.$emit('draggingStart', item);
         },
         onDrop(evt, list) {
-            const itemID = evt.dataTransfer.getData('itemID');
-            this.$emit('draggingEnd', itemID, list);
+            let id = evt.dataTransfer.getData('id');
+            let columnId = evt.dataTransfer.getData('column_id');
+            this.$emit('draggingEnd', {id: parseInt(id), column_id: parseInt(columnId)}, list);
         },
     },
     computed: {

@@ -117,7 +117,22 @@ export default {
 
         },
         onDraggingEnd(card, column) {
+            let currentCard;
+            for (let col of this.columns) {
+                if (col.id === card.column_id) {
+                    for (let cardObj of col.cards) {
+                        if (cardObj.id === card.id) {
+                            currentCard = cardObj;
+                        }
+                    }
+                    col.cards.splice(col.cards.indexOf(currentCard), 1);
+                }
+            }
 
+            if (card.column_id !== column.id) {
+                currentCard.column_id = column.id;
+                column.cards.push(currentCard);
+            }
         }
     },
 };
